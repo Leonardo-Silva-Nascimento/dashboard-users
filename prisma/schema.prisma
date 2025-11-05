@@ -3,8 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -18,7 +18,7 @@ model User {
   cep       String
   state     String
   complement String?
-  type      String   @default("CLIENT") // Mudado de enum para String
+  type      UserType @default(CLIENT)
   
   // Relacionamentos
   consultantId String?
@@ -31,4 +31,7 @@ model User {
   @@map("users")
 }
 
-// Removido o enum UserType pois SQLite não suporta
+enum UserType {
+  CONSULTANT
+  CLIENT
+}
