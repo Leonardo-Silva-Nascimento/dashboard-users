@@ -130,5 +130,22 @@ export async function deleteUser(id: string): Promise<boolean> {
   } catch (error) {
     console.error('Erro ao excluir usuário:', error)
     return false
+  }  
+}
+
+export async function getUserMetrics(consultantId?: string) {
+  let clientQuery = supabase
+    .from('users')
+    .select('*', { count: 'exact', head: true })
+    .eq('type', 'CLIENT')
+
+  if (consultantId) {
+    clientQuery = clientQuery.eq('consultant_id', consultantId)
+  }
+
+  const { count: totalClients, error: totalError } = await clientQuery
+
+  if (totalError) {
+    console.error('Erro ao contar clientes:', totalError)
   }
 }
