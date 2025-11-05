@@ -1,15 +1,13 @@
+// app/api/consultants/route.ts
 import { NextResponse } from 'next/server'
-import { prisma } from '../../../lib/db'
+import { getConsultants } from '.././../../lib/actions'
 
 export async function GET() {
   try {
-    const consultants = await prisma.user.findMany({
-      where: { type: 'CONSULTANT' },
-      orderBy: { name: 'asc' }
-    })
-
+    const consultants = await getConsultants()
     return NextResponse.json(consultants)
   } catch (error) {
+    console.error('Erro ao buscar consultores:', error)
     return NextResponse.json(
       { error: 'Erro ao buscar consultores' },
       { status: 500 }
