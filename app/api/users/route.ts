@@ -1,40 +1,83 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getUsers, createUser } from '../../../lib/actions'
-import { userSchema } from '../../../lib/validations'
+import { getUserById, updateUser, deleteUser } from '@/lib/actions'
+import { userSchema } from '@/lib/validations'
 
-export async function GET(request: NextRequest) {
+interface RouteParams {
+  params: {
+    id: string
+  }
+}
+
+export async function GET(
+  request: NextRequest,
+  { params }: RouteParams
+) {
   try {
-    const { searchParams } = new URL(request.url)
-    const consultantId = searchParams.get('consultant') || undefined
+    const user = await getUserById(params.id)
 
-    const users = await getUsers(consultantId)
-    return NextResponse.json(users)
+    if (!user) {
+      return NextResponse.json(
+        { error: 'Usuário não encontrado' },
+        { status: 404 }
+      )
+    }
+
+    return NextResponse.json(user)
   } catch (error) {
+    console.error('Erro ao buscar usuário:', error)
     return NextResponse.json(
-      { error: 'Erro ao buscar usuários' },
+      { error: 'Erro ao buscar usuário' },
       { status: 500 }
     )
   }
 }
 
-export async function POST(request: NextRequest) {
+export async function PUT(
+  request: NextRequest,
+  { params }: RouteParams
+) {
   try {
     const json = await request.json()
     const body = userSchema.parse(json)
 
-    const user = await createUser(body)
+    const user = await updateUser(params.id, body)
 
     if (!user) {
       return NextResponse.json(
-        { error: 'Erro ao criar usuário' },
+        { error: 'Erro ao atualizar usuário' },
         { status: 500 }
       )
     }
 
     return NextResponse.json(user)
   } catch (error) {
+    console.error('Erro ao atualizar usuário:', error)
     return NextResponse.json(
-      { error: 'Erro ao criar usuário' },
+      { error: 'Erro ao atualizar usuário' },
+      { status: 500 }
+    )
+  }
+}
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: RouteParams
+) {
+  try {
+    const success = await deleteUser(params.id)
+
+    if (!success) {
+      return NextResponse.json(
+        { error: 'Erro ao excluir usuário' },
+        { status: 500 }
+      )
+    }
+
+    return NextResponse.json({ success: true })
+  } catch (error) {
+    console.error('Erro ao excluir usuário:', error)
+    return NextResponse.json(
+      { error: 'Erro ao excluir usuário' },
       { status: 500 }
     )
   }

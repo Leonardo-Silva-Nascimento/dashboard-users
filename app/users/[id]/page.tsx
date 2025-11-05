@@ -1,12 +1,14 @@
-import UserForm from '../../../components/users/user-form'
-import { getUserById, getConsultants } from '../../../lib/actions'
+import UserForm from '@/components/users/user-form'
+import { getUserById, getConsultants } from '@/lib/actions'
 import { notFound } from 'next/navigation'
 
-export default async function EditUserPage({
-  params,
-}: {
-  params: { id: string }
-}) {
+interface PageProps {
+  params: {
+    id: string
+  }
+}
+
+export default async function EditUserPage({ params }: PageProps) {
   const [user, consultants] = await Promise.all([
     getUserById(params.id),
     getConsultants()
