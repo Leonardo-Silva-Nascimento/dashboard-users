@@ -1,4 +1,3 @@
-// components/dashboard/client-table.tsx
 'use client'
 
 import { useState } from 'react'

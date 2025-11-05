@@ -1,4 +1,3 @@
-// app/dashboard/page.tsx
 import { Suspense } from 'react'
 import Metrics from '@/components/dashboard/metrics'
 import ClientTable from '@/components/dashboard/client-table'

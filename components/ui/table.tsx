@@ -1,4 +1,3 @@
-// components/ui/table.tsx
 import * as React from "react"
 
 const Table = React.forwardRef<

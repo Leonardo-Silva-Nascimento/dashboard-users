@@ -1,4 +1,3 @@
-// app/users/[id]/page.tsx
 import UserForm from '@/components/users/user-form'
 import { getUserById, getConsultants } from '@/lib/actions'
 import { notFound } from 'next/navigation'

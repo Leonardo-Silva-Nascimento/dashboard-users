@@ -1,4 +1,3 @@
-// app/users/create/page.tsx
 import UserForm from '@/components/users/user-form'
 import { getConsultants } from '@/lib/actions'
 

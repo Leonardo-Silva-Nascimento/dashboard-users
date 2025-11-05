@@ -1,4 +1,3 @@
-// prisma/seed.ts
 import { PrismaClient, UserType } from '@prisma/client'
 
 const prisma = new PrismaClient()

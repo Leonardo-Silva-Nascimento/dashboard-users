@@ -1,4 +1,3 @@
-// lib/types.ts
 export enum UserType {
     CONSULTANT = 'CONSULTANT',
     CLIENT = 'CLIENT'
