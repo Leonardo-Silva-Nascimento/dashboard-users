@@ -1,8 +1,8 @@
 // app/users/page.tsx
 import { Suspense } from 'react'
-import UsersTable from '@/components/users/users-table'
-import { Button } from '@/components/ui/button'
-import { getUsers } from '@/lib/actions'
+import UsersTable from '../../components/users/users-table'
+import { Button } from '../../components/ui/button'
+import { getUsers } from '../../lib/actions'
 import Link from 'next/link'
 
 export default async function UsersPage() {

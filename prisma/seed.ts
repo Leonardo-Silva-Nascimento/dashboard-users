@@ -1,5 +1,5 @@
-import { supabase } from '@/lib/supabase'
-import { UserType } from '@/lib/types'
+import { supabase } from '../lib/supabase'
+import { UserType } from '../lib/types'
 
 async function seedSupabase() {
   console.log('Iniciando seed do Supabase...')

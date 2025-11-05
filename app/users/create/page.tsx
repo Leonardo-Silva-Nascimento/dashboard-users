@@ -1,5 +1,5 @@
-import UserForm from '@/components/users/user-form'
-import { getConsultants } from '@/lib/actions'
+import UserForm from '../../../components/users/user-form'
+import { getConsultants } from '../../../lib/actions'
 
 export default async function CreateUserPage() {
   const consultants = await getConsultants()

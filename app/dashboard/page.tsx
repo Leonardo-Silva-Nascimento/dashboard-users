@@ -1,7 +1,7 @@
 import { Suspense } from 'react'
-import Metrics from '@/components/dashboard/metrics'
-import ClientTable from '@/components/dashboard/client-table'
-import { getUsers, getConsultants, getUserMetrics } from '@/lib/actions'
+import Metrics from '../../components/dashboard/metrics'
+import ClientTable from '../../components/dashboard/client-table'
+import { getUsers, getConsultants, getUserMetrics } from '../../lib/actions'
 
 export default async function DashboardPage({
   searchParams,

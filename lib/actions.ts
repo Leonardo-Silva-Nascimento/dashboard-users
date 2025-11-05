@@ -1,7 +1,7 @@
 'use server'
 
-import { supabase } from '@/lib/supabase'
-import { User, Consultant, UserType } from '@/lib/types'
+import { supabase } from '../lib/supabase'
+import { User, Consultant, UserType } from '../lib/types'
 
 export async function getUsers(consultantId?: string): Promise<User[]> {
   let query = supabase

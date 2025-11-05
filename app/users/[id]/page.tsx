@@ -1,5 +1,5 @@
-import UserForm from '@/components/users/user-form'
-import { getUserById, getConsultants } from '@/lib/actions'
+import UserForm from '../../../components/users/user-form'
+import { getUserById, getConsultants } from '../../../lib/actions'
 import { notFound } from 'next/navigation'
 
 export default async function EditUserPage({

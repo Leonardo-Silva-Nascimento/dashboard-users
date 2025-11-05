@@ -1,14 +1,13 @@
-// components/users/user-form.tsx
 'use client'
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { z } from 'zod'
-import { User, Consultant, UserType } from '@/lib/types'
-import { userSchema } from '@/lib/validations'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { User, Consultant, UserType } from '../../lib/types'
+import { userSchema } from '../../lib/validations'
+import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card'
+import { Button } from '../../components/ui/button'
+import { Input } from '../../components/ui/input'
 interface UserFormProps {
   user?: User
   consultants: Consultant[]
