@@ -1,23 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/db'
+import { getUsers, createUser } from '@/lib/actions'
 import { userSchema } from '@/lib/validations'
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
-    const consultantId = searchParams.get('consultant')
+    const consultantId = searchParams.get('consultant') || undefined
 
-    const where = consultantId ? { consultantId } : {}
-
-    const users = await prisma.user.findMany({
-      where,
-      include: {
-        consultant: true,
-        clients: true
-      },
-      orderBy: { createdAt: 'desc' }
-    })
-
+    const users = await getUsers(consultantId)
     return NextResponse.json(users)
   } catch (error) {
     return NextResponse.json(
@@ -32,18 +22,14 @@ export async function POST(request: NextRequest) {
     const json = await request.json()
     const body = userSchema.parse(json)
 
-    const user = await prisma.user.create({
-      data: {
-        ...body,
-        clients: body.type === 'CONSULTANT' ? {
-          connect: body.clients?.map((id: string) => ({ id })) || []
-        } : undefined
-      },
-      include: {
-        consultant: true,
-        clients: true
-      }
-    })
+    const user = await createUser(body)
+
+    if (!user) {
+      return NextResponse.json(
+        { error: 'Erro ao criar usuário' },
+        { status: 500 }
+      )
+    }
 
     return NextResponse.json(user)
   } catch (error) {

@@ -1,9 +1,7 @@
-export const UserType = {
-  CONSULTANT: 'CONSULTANT',
-  CLIENT: 'CLIENT'
-} as const
-
-export type UserType = typeof UserType[keyof typeof UserType]
+export enum UserType {
+  CONSULTANT = 'CONSULTANT',
+  CLIENT = 'CLIENT'
+}
 
 export interface User {
   id: string
@@ -17,11 +15,11 @@ export interface User {
   state: string
   complement?: string
   type: UserType
-  consultantId?: string
+  consultant_id?: string
   consultant?: User
   clients?: User[]
-  createdAt: Date
-  updatedAt: Date
+  created_at: string
+  updated_at: string
 }
 
 export type Consultant = Pick<User, 'id' | 'name' | 'email'>

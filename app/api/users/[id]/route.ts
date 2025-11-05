@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/db'
+import { getUserById, updateUser, deleteUser } from '@/lib/actions'
 import { userSchema } from '@/lib/validations'
 
 export async function GET(
@@ -7,13 +7,7 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const user = await prisma.user.findUnique({
-      where: { id: params.id },
-      include: {
-        consultant: true,
-        clients: true
-      }
-    })
+    const user = await getUserById(params.id)
 
     if (!user) {
       return NextResponse.json(
@@ -39,19 +33,14 @@ export async function PUT(
     const json = await request.json()
     const body = userSchema.parse(json)
 
-    const user = await prisma.user.update({
-      where: { id: params.id },
-      data: {
-        ...body,
-        clients: body.type === 'CONSULTANT' ? {
-          set: body.clients?.map((id: string) => ({ id })) || []
-        } : undefined
-      },
-      include: {
-        consultant: true,
-        clients: true
-      }
-    })
+    const user = await updateUser(params.id, body)
+
+    if (!user) {
+      return NextResponse.json(
+        { error: 'Erro ao atualizar usuário' },
+        { status: 500 }
+      )
+    }
 
     return NextResponse.json(user)
   } catch (error) {
@@ -67,9 +56,14 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    await prisma.user.delete({
-      where: { id: params.id }
-    })
+    const success = await deleteUser(params.id)
+
+    if (!success) {
+      return NextResponse.json(
+        { error: 'Erro ao excluir usuário' },
+        { status: 500 }
+      )
+    }
 
     return NextResponse.json({ success: true })
   } catch (error) {
