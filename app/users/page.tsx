@@ -1,6 +1,6 @@
 // app/users/page.tsx
 import { Suspense } from 'react'
-import UsersTable from '../../components/users/users-table'
+import UsersTable from '../../components/users/users-table.tsx'
 import { Button } from '../../components/ui/button'
 import { getUsers } from '../../lib/actions'
 import Link from 'next/link'
