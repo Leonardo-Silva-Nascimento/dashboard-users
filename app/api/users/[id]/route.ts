@@ -4,10 +4,11 @@ import { userSchema } from '../../../../lib/validations'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const user = await getUserById(params.id)
+    const { id } = await params
+    const user = await getUserById(id)
 
     if (!user) {
       return NextResponse.json(
@@ -18,6 +19,7 @@ export async function GET(
 
     return NextResponse.json(user)
   } catch (error) {
+    console.error('Erro ao buscar usuário:', error)
     return NextResponse.json(
       { error: 'Erro ao buscar usuário' },
       { status: 500 }
@@ -27,13 +29,14 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const json = await request.json()
     const body = userSchema.parse(json)
 
-    const user = await updateUser(params.id, body)
+    const user = await updateUser(id, body)
 
     if (!user) {
       return NextResponse.json(
@@ -44,6 +47,7 @@ export async function PUT(
 
     return NextResponse.json(user)
   } catch (error) {
+    console.error('Erro ao atualizar usuário:', error)
     return NextResponse.json(
       { error: 'Erro ao atualizar usuário' },
       { status: 500 }
@@ -53,10 +57,11 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const success = await deleteUser(params.id)
+    const { id } = await params
+    const success = await deleteUser(id)
 
     if (!success) {
       return NextResponse.json(
@@ -67,6 +72,7 @@ export async function DELETE(
 
     return NextResponse.json({ success: true })
   } catch (error) {
+    console.error('Erro ao excluir usuário:', error)
     return NextResponse.json(
       { error: 'Erro ao excluir usuário' },
       { status: 500 }
