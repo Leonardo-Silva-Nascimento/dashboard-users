@@ -1,0 +1,38 @@
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  phone     String
+  cpf       String   @unique
+  age       Int
+  address   String
+  cep       String
+  state     String
+  complement String?
+  type      UserType @default(CLIENT)
+  
+  // Relacionamentos
+  consultantId String?
+  consultant   User?   @relation("ConsultantClients", fields: [consultantId], references: [id])
+  clients      User[]  @relation("ConsultantClients")
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("users")
+}
+
+enum UserType {
+  CONSULTANT
+  CLIENT
+}

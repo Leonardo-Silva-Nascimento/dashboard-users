@@ -1,0 +1,82 @@
+// app/api/users/[id]/route.ts
+import { NextRequest, NextResponse } from 'next/server'
+import { prisma } from '@/lib/db'
+import { userSchema } from '@/lib/validations'
+
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: params.id },
+      include: {
+        consultant: true,
+        clients: true
+      }
+    })
+
+    if (!user) {
+      return NextResponse.json(
+        { error: 'Usuário não encontrado' },
+        { status: 404 }
+      )
+    }
+
+    return NextResponse.json(user)
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'Erro ao buscar usuário' },
+      { status: 500 }
+    )
+  }
+}
+
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const json = await request.json()
+    const body = userSchema.parse(json)
+
+    const user = await prisma.user.update({
+      where: { id: params.id },
+      data: {
+        ...body,
+        clients: body.type === 'CONSULTANT' ? {
+          set: body.clients?.map((id: string) => ({ id })) || []
+        } : undefined
+      },
+      include: {
+        consultant: true,
+        clients: true
+      }
+    })
+
+    return NextResponse.json(user)
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'Erro ao atualizar usuário' },
+      { status: 500 }
+    )
+  }
+}
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    await prisma.user.delete({
+      where: { id: params.id }
+    })
+
+    return NextResponse.json({ success: true })
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'Erro ao excluir usuário' },
+      { status: 500 }
+    )
+  }
+}
