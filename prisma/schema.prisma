@@ -18,7 +18,7 @@ model User {
   cep       String
   state     String
   complement String?
-  type      UserType @default(CLIENT)
+  type      String   @default("CLIENT") // Mudado de enum para String
   
   // Relacionamentos
   consultantId String?
@@ -31,7 +31,4 @@ model User {
   @@map("users")
 }
 
-enum UserType {
-  CONSULTANT
-  CLIENT
-}
+// Removido o enum UserType pois SQLite não suporta
