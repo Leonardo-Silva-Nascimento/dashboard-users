@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getUserById, updateUser, deleteUser } from '@/lib/actions'
-import { userSchema } from '@/lib/validations'
+import { getUsers, createUser } from '../../../lib/actions'
+import { userSchema } from '../../../lib/validations'
 
 interface RouteParams {
   params: {

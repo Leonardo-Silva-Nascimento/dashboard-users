@@ -80,6 +80,39 @@ export async function updateUser(id: string, userData: any): Promise<User | null
     return null
   }
 }
+export async function getConsultants(): Promise<Consultant[]> {
+  const { data, error } = await supabase
+    .from('users')
+    .select('id, name, email')
+    .eq('type', 'CONSULTANT')
+    .order('name', { ascending: true })
+
+  if (error) {
+    console.error('Erro ao buscar consultores:', error)
+    return []
+  }
+
+  return data as Consultant[]
+}
+
+export async function createUser(userData: any): Promise<User | null> {
+  const { data, error } = await supabase
+    .from('users')
+    .insert([userData])
+    .select(`
+      *,
+      consultant:users!consultant_id(*),
+      clients:users!consultant_id(*)
+    `)
+    .single()
+
+  if (error) {
+    console.error('Erro ao criar usuário:', error)
+    return null
+  }
+
+  return data as User
+}
 
 export async function deleteUser(id: string): Promise<boolean> {
   try {
